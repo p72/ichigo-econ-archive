@@ -1228,6 +1228,11 @@ RELEASE_README = """いちごBBS経済板 アーカイブ（{date} 版）
   1 行 = 1 レスの SQLite（ichigo_posts.sqlite）を作れます。キーワードや人で横断して探したり、
   AI に渡して日本語で質問したりするのに向いています。
 
+  作らなくても、作成済みのもの（全文検索の索引なしの版）をリポジトリの releases/ で配っています。
+    ichigo_posts-{date}.sqlite.zip（約 34MB。展開すると ichigo_posts.sqlite、約 110MB）
+    https://github.com/p72/ichigo-econ-archive/tree/main/releases
+  自分で作るときは次のとおりです。
+
   1. Python 3.8 以上を用意する（Windows は python.org の公式インストーラー）
   2. このフォルダでターミナルを開く
        Windows: エクスプローラーのアドレス欄に cmd と打って Enter
@@ -1291,6 +1296,19 @@ def cmd_release(args):
             for fn in sorted(os.listdir(d)):
                 z.write(os.path.join(d, fn), f"{name}/{fn}")
     print(f"{out} を作りました（{nt} スレ / {np_} レス / {os.path.getsize(out) / 1e6:.1f}MB）")
+    if args.no_db:
+        return
+    # 検索用 DB（全文検索の索引なしの軽い版）も、いま作った zip から作って zip にしておく。
+    # Python を使わない人や、AI にそのまま渡したい人向け。中の名前は ichigo_posts.sqlite
+    import subprocess
+    db_out = os.path.join(os.path.dirname(os.path.abspath(out)), f"ichigo_posts-{date}.sqlite.zip")
+    with tempfile.TemporaryDirectory() as tmp:
+        sq = os.path.join(tmp, "ichigo_posts.sqlite")
+        subprocess.run([sys.executable, tool, out, "-o", sq, "--no-fts"], check=True, stdout=subprocess.DEVNULL)
+        with zipfile.ZipFile(db_out, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:
+            z.write(sq, "ichigo_posts.sqlite")
+        size = os.path.getsize(sq)
+    print(f"{db_out} を作りました（検索用 DB {size / 1e6:.0f}MB → zip {os.path.getsize(db_out) / 1e6:.1f}MB）")
 
 
 def cmd_export_urls(args):
@@ -1360,6 +1378,8 @@ def main():
     sp.add_parser("handles").set_defaults(f=cmd_handles)
     s = sp.add_parser("release", help="配布用 zip（閲覧用 HTML＋README＋build_posts_db.py）を作る")
     s.add_argument("--date", help="版の日付（既定: 今日）"); s.add_argument("--out", help="zip の名前")
+    s.add_argument("--no-db", action="store_true",
+                   help="検索用 DB の zip（ichigo_posts-YYYY-MM-DD.sqlite.zip）を作らない")
     s.set_defaults(f=cmd_release)
     s = sp.add_parser("export-urls", help="DB の再現に必要な保存 URL だけを書き出す")
     s.add_argument("file"); s.set_defaults(f=cmd_export_urls)

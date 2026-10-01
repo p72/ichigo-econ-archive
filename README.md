@@ -6,11 +6,15 @@ Internet Archive の Wayback Machine から集めて、SQLite の掲示板デー
 | したいこと | 使うもの |
 |---|---|
 | **ブラウザで読む** | 公開サイト https://p72.github.io/ichigo-econ-archive/ 、または zip を展開して `index.html` を開く（→「読むだけの人へ」）|
-| **検索・集計・AI で読む** | zip の中の `build_posts_db.py` で検索用 DB（`ichigo_posts.sqlite`）を作る（→「検索用 DB を作る・使う」）|
+| **検索・集計・AI で読む** | 作成済みの検索用 DB [`ichigo_posts-2026-10-01.sqlite.zip`](releases/ichigo_posts-2026-10-01.sqlite.zip) を展開して使う（→「検索用 DB を作る・使う」）|
 | **自分で集め直す** | 収集ツール `ichigo_archiver.py` で Wayback Machine から集める（→「はじめかた」）|
 
-zip（[releases/ichigo-econ-archive-2026-10-01.zip](releases/ichigo-econ-archive-2026-10-01.zip)、約 34MB）は、収集ツールで集めた結果を
-読める形に書き出したものです。中身は公開サイトと同じ HTML に、説明書と検索用 DB を作るツールを添えています。
+配布物は 2 つで、どちらも [`releases/`](releases/) にあります。
+
+- [`ichigo-econ-archive-2026-10-01.zip`](releases/ichigo-econ-archive-2026-10-01.zip)（約 34MB）: 収集ツールで集めた結果を読める形に書き出したもの。
+  中身は公開サイトと同じ HTML に、説明書と検索用 DB を作るツールを添えています
+- [`ichigo_posts-2026-10-01.sqlite.zip`](releases/ichigo_posts-2026-10-01.sqlite.zip)（約 34MB）: 上の zip から作った検索用 DB。展開すると
+  `ichigo_posts.sqlite`（約 110MB、1 行 = 1 レス）が出てきます。Python なしで、すぐ SQL で調べたり AI に渡したりできます
 
 - **リポジトリ（main ブランチ）**: https://github.com/p72/ichigo-econ-archive/tree/main （収集ツール・ドキュメント・zip）
 - **公開サイト**: https://p72.github.io/ichigo-econ-archive/
@@ -29,7 +33,7 @@ zip（[releases/ichigo-econ-archive-2026-10-01.zip](releases/ichigo-econ-archive
 | **収集ツール**（このリポジトリ）| Wayback から集めて収集用 DB を作り、そこからアーカイブを書き出す | 数百 KB | 配る |
 | **収集用 DB**（`ichigo.db`）| Wayback の原本（生 HTML）、どこまで集めたかの記録、取り出したレス | 約 850MB | 配らない（原本・メール欄を含むため）|
 | **アーカイブ本体**（`ichigo-econ-archive-YYYY-MM-DD.zip`）| 復元した経済板を読める HTML にしたもの＋説明書＋ビルドツール | 約 34MB | 配る |
-| **検索用 DB**（`ichigo_posts.sqlite`）| アーカイブ本体から `build_posts_db.py` で作る、検索・分析用の DB | 約 110MB（全文検索つき約 360MB）| 受け取った人が作る |
+| **検索用 DB**（`ichigo_posts.sqlite`）| アーカイブ本体から `build_posts_db.py` で作る、検索・分析用の DB | 約 110MB（全文検索つき約 360MB）| 作成済みの版（全文検索の索引なし）を zip で配る。受け取った人が作ることもできる |
 
 ```
 Wayback Machine
@@ -67,11 +71,27 @@ Python も DB も要りません。
 
 ## 検索用 DB を作る・使う（調べもの・AI で読む）
 
-zip の中の `build_posts_db.py` を使うと、閲覧用 HTML から **1 行 = 1 レスの SQLite データベース**（`ichigo_posts.sqlite`）を作れます。
+検索用 DB（`ichigo_posts.sqlite`）は、**1 行 = 1 レスの SQLite データベース**です。
 キーワードや人で横断して探したり、集計したり、AI に渡して日本語で質問したりするのに向いています。
-収集ツールや `ichigo.db` は要りません。
+作成済みのものをダウンロードするのが一番手軽です。収集ツールや `ichigo.db` は要りません。
 
-### 作り方
+### いちばん手軽な方法：作成済みの DB を使う
+
+1. [`releases/ichigo_posts-2026-10-01.sqlite.zip`](releases/ichigo_posts-2026-10-01.sqlite.zip) をダウンロードする（約 34MB）
+2. 展開すると `ichigo_posts.sqlite`（約 110MB）が出てくる
+3. DB Browser for SQLite などで開くか、AI に渡す（→ 下の「AI で読む」）
+
+これは全文検索の索引を省いた軽い版です。検索は `LIKE` で行えます（18 万件でも 1 秒かからない）。
+全文検索の索引がほしいときは、この DB に次の SQL を 1 回実行すると追加できます（40 秒ほど、約 360MB になる）。
+
+```sql
+CREATE VIRTUAL TABLE posts_fts USING fts5(body, name, thread_key UNINDEXED, no UNINDEXED, tokenize='trigram');
+INSERT INTO posts_fts(body, name, thread_key, no) SELECT body, name, thread_key, no FROM posts;
+```
+
+### 自分で作る（閲覧用 HTML の zip から）
+
+閲覧用 HTML の zip に入っている `build_posts_db.py` でも、同じ DB を作れます。
 
 1. **Python 3.8 以上**を用意する。Windows は python.org の公式インストーラーで入れます（Mac は入っていることが多い）。
    入っているかは、ターミナルで `python --version`（Mac は `python3 --version`）と打つとわかります
@@ -130,7 +150,25 @@ SELECT substr(date, 1, 4) AS 年, count(*) FROM posts
 ### AI で読む
 
 `ichigo_posts.sqlite` を、ファイルを扱える AI に渡すと、日本語で質問できます。
-手元のファイルを読んで SQL を実行できる AI エージェントでも、ファイルをアップロードして分析できる AI チャットでも使えます。
+
+渡し方:
+
+- **ファイルをアップロードして分析できる AI チャット**：`ichigo_posts-2026-10-01.sqlite.zip`（約 34MB）をそのまま渡せることがあります
+  （zip を中で展開できるサービスの場合）。うまくいかないときは、展開した `ichigo_posts.sqlite`（約 110MB）を渡してください
+- **手元のファイルを読んでコマンドを実行できる AI エージェント**：展開した `ichigo_posts.sqlite` を作業フォルダに置いて、
+  「このフォルダの `ichigo_posts.sqlite` を使って」と頼みます。大きさの上限を気にせずに使えます
+
+最初に、次の説明をそのまま貼り付けると、AI が迷わず SQL を書けます。
+
+```text
+ichigo_posts.sqlite は、匿名掲示板「いちごびびえす」経済／経済学板（2000〜2014年）の
+書き込みを集めた SQLite です。
+- posts: 1 行 1 レス。thread_key（例 economy/0126）, no（レス番号）, name（名前）,
+  date（例 2002/05/18(Sat) 18:03）, uid（ID）, trip（トリップ）, handle_k（まとめログのコテハン番号）, body（本文）
+- threads: スレ。thread_key, title, posts（レス数）
+- handles: まとめログのコテハン。k, name, post_count
+本文は body LIKE '%語%' で探してください。答えには必ず thread_key と no を付けてください。
+```
 
 頼み方の例:
 
@@ -144,8 +182,8 @@ SELECT substr(date, 1, 4) AS 年, count(*) FROM posts
 - 最初に上の「中身（表と列）」を伝えると、AI が迷わず SQL を書けます
 - 答えには**スレ番号とレス番号を付けてもらい**、原文で確かめてください。公開サイトでは
   `https://p72.github.io/ichigo-econ-archive/economy_0126.html#556` のように、`#レス番号` でそのレスに飛べます
-- アップロードできるファイルの大きさはサービスによって上限があります。`--no-fts` の小さい版を使い、それでも大きいときは
-  必要なスレだけを SQL で取り出して（CSV などにして）渡してください
+- アップロードできるファイルの大きさはサービスによって上限があります。上限を超えるときは、
+  必要なスレや年だけを SQL で取り出して（CSV などにして）渡してください
 - 書き込みは当時の投稿者のものです。AI の要約は、原文と照らし合わせて扱ってください
 
 ## はじめかた
@@ -204,11 +242,15 @@ python ichigo_archiver.py export-csv posts.csv    # 全レスを CSV に
 ## 配布用の zip を作る（release）
 
 ```bash
-python ichigo_archiver.py release                 # → ichigo-econ-archive-（今日の日付）.zip
-python ichigo_archiver.py release --date 2026-10-01 --out 名前.zip
+python ichigo_archiver.py release                 # → ichigo-econ-archive-（日付）.zip と ichigo_posts-（日付）.sqlite.zip
+python ichigo_archiver.py release --date 2026-10-01 --out releases/ichigo-econ-archive-2026-10-01.zip
+python ichigo_archiver.py release --no-db         # 検索用 DB の zip は作らない
 ```
 
-zip の中身は、閲覧用 HTML（スレごと＋`index.html`）、説明書 `README.txt`、ビルドツール `build_posts_db.py` です。
+`release` は 2 つの zip を作ります。検索用 DB の zip は、閲覧用 HTML の zip と同じ場所に、その zip から
+`build_posts_db.py --no-fts` で作った `ichigo_posts.sqlite` を固めたものです（中身が必ず一致します）。
+
+閲覧用 HTML の zip の中身は、閲覧用 HTML（スレごと＋`index.html`）、説明書 `README.txt`、ビルドツール `build_posts_db.py` です。
 配布用なので、**スパムとメール欄は入れず、本文中のメールアドレスは `yo***@example.jp` のように伏せます**
 （手元の `ichigo.db` はそのまま）。HTML の各レスには、見た目を変えずに日付・ID・トリップ・コテハン番号を
 data 属性で埋め込んであり、`build_posts_db.py` はそれを読んで `ichigo_posts.sqlite` を作ります。
