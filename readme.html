@@ -4,6 +4,7 @@ Internet Archive の Wayback Machine から集めて、SQLite の掲示板デー
 <table><tr><th>したいこと</th><th>使うもの</th></tr><tr><td><strong>ブラウザで読む</strong></td><td>公開サイト <a href="https://p72.github.io/ichigo-econ-archive/">https://p72.github.io/ichigo-econ-archive/</a> 、または zip を展開して <code>index.html</code> を開く（→「読むだけの人へ」）</td></tr><tr><td><strong>検索・集計・AI で読む</strong></td><td>zip の中の <code>build_posts_db.py</code> で検索用 DB（<code>ichigo_posts.sqlite</code>）を作る（→「検索用 DB を作る・使う」）</td></tr><tr><td><strong>自分で集め直す</strong></td><td>収集ツール <code>ichigo_archiver.py</code> で Wayback Machine から集める（→「はじめかた」）</td></tr></table>
 <p>zip（<a href="https://github.com/p72/ichigo-econ-archive/raw/main/releases/ichigo-econ-archive-2026-10-01.zip">releases/ichigo-econ-archive-2026-10-01.zip</a>、約 34MB）は、収集ツールで集めた結果を
 読める形に書き出したものです。中身は公開サイトと同じ HTML に、説明書と検索用 DB を作るツールを添えています。</p>
+<ul><li><strong>リポジトリ（main ブランチ）</strong>: <a href="https://github.com/p72/ichigo-econ-archive/tree/main">https://github.com/p72/ichigo-econ-archive/tree/main</a> （収集ツール・ドキュメント・zip）</li><li><strong>公開サイト</strong>: <a href="https://p72.github.io/ichigo-econ-archive/">https://p72.github.io/ichigo-econ-archive/</a></li></ul>
 <p>収集ツールについて:</p>
 <ul><li>Python 3.8 以上の標準ライブラリだけで動きます（追加インストール不要。3.14 で動作確認）</li><li>取得は 2 秒間隔。中断・再開ができるので、毎日少しずつ回して「コツコツ」集められます</li><li>時期ごとに違う 3 種類の掲示板システム＋まとめログサイトの HTML を、同じ形のレスに分解します</li><li>全文検索、アンカー（<code>&gt;&gt;554</code>）を辿る表示、閲覧用 HTML・CSV の書き出しができます</li></ul>
 <h2>3 つのもの</h2>

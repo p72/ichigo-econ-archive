@@ -3,17 +3,21 @@
 
   ブラウザで読む         → このフォルダの index.html を開く（下の「読む」）
   検索・集計・AI で読む  → build_posts_db.py で検索用 DB を作る（下の「検索用の SQLite を作る」）
-  自分で集め直す         → 収集ツール ichigo_archiver.py で Wayback Machine から集める
-                           https://github.com/p72/ichigo-econ-archive
+  自分で集め直す         → 収集ツール ichigo_archiver.py で Wayback Machine から集める（下のリポジトリ）
 
 この zip は、収集ツールで集めた結果を読める形に書き出したものです。
-公開サイト https://p72.github.io/ichigo-econ-archive/ と同じ HTML に、説明書と検索用 DB を作るツールを添えています。
+公開サイトと同じ HTML に、説明書と検索用 DB を作るツールを添えています。
+
+  リポジトリ（main ブランチ）  https://github.com/p72/ichigo-econ-archive/tree/main
+                               （収集ツール・ドキュメント・zip の最新版）
+  公開サイト                   https://p72.github.io/ichigo-econ-archive/
 
 ■ 中身
   index.html            トップ（ここから読み始める）。年ごとの一覧へのリンクと、まとめログのコテハン一覧
   year_YYYY.html        その年に立ったスレの一覧（スレ番号・スレタイ・レス数・期間）
   economy_NNNN.html     スレ 1 本 = 1 ファイル（1,034 スレ / 179,454 レス）
   build_posts_db.py     この HTML から検索用の SQLite（ichigo_posts.sqlite）を作るツール
+  readme.html           README（このアーカイブとツールの詳しい説明。SQL の例や AI での使い方も）
   README.txt            このファイル
 
 ■ 読む（Python も DB も要りません）
@@ -66,4 +70,5 @@
 
 ■ 作り方
   この zip は、収集ツール（ichigo_archiver.py）の release コマンドで 2026-10-01 に作りました。
-  収集ツールは Wayback から集め直す・作り直すためのもので、別に配布しています。
+  収集ツールは Wayback から集め直す・作り直すためのもので、リポジトリの main ブランチで配布しています。
+    https://github.com/p72/ichigo-econ-archive/tree/main
