@@ -57,6 +57,89 @@ Python も DB も要りません。
   そのファイルだけが一時フォルダに取り出されるため、一覧やほかのスレへのリンクが切れます
 - スマホでは、ファイルアプリなどで展開してから `index.html` を開いてください
 
+## 検索用 DB を作る・使う（調べもの・AI で読む）
+
+zip の中の `build_posts_db.py` を使うと、閲覧用 HTML から **1 行 = 1 レスの SQLite データベース**（`ichigo_posts.sqlite`）を作れます。
+キーワードや人で横断して探したり、集計したり、AI に渡して日本語で質問したりするのに向いています。
+収集ツールや `ichigo.db` は要りません。
+
+### 作り方
+
+1. **Python 3.8 以上**を用意する。Windows は python.org の公式インストーラーで入れます（Mac は入っていることが多い）。
+   入っているかは、ターミナルで `python --version`（Mac は `python3 --version`）と打つとわかります
+2. zip を**展開する**
+3. 展開したフォルダで**ターミナルを開く**。Windows はエクスプローラーのアドレス欄に `cmd` と打って Enter、
+   Mac はターミナルで `cd ` と打ってから、フォルダをウィンドウにドラッグして Enter
+4. 次のどちらかを実行する（Mac は `python` を `python3` に）
+
+```bash
+python build_posts_db.py            # 全文検索の索引つき（約 360MB・30 秒ほど）
+python build_posts_db.py --no-fts   # 索引なし（約 110MB・数秒）。AI に渡すならこちら
+```
+
+同じフォルダに `ichigo_posts.sqlite` ができます。zip を展開せずに `python build_posts_db.py ichigo-econ-archive-2026-10-01.zip` でも作れます。
+同じ名前のファイルがあるときは上書きせずに止まるので、作り直すときは消すか `-o 別の名前.sqlite` を付けてください。
+
+### 中身（表と列）
+
+| 表 | 1 行の単位 | 列 |
+|---|---|---|
+| `posts` | レス 1 件（179,454 行）| `thread_key` スレ（`economy/0126`）、`no` レス番号、`name` 名前、`date` 日付（`2002/05/18(Sat) 18:03`）、`uid` ID（2009 年 5 月以降）、`trip` トリップ、`handle_k` まとめログのコテハン番号、`body` 本文 |
+| `threads` | スレ 1 本（1,034 行）| `thread_key`、`title` スレタイ、`posts` レス数 |
+| `handles` | まとめログのコテハン 1 人（21 行）| `k` 番号、`name` まとめログでの登録名、`post_count` まとめログ上の投稿数 |
+| `posts_fts` | 全文検索の索引（`--no-fts` では作らない）| `body`、`name`、`thread_key`、`no` |
+
+- メール欄とスパムは入っていません。本文中のメールアドレスは `yo***@example.jp` のように伏せてあります
+- `handle_k` は、まとめログがそのコテハンの書き込みとして載せていたレスにだけ入っています（名前欄が同じでも、載っていなければ空）
+- 表記ゆれはそのまま残しています。「～」と「〜」、「－」と「−」は別の文字なので、探すときは両方試してください
+
+### 調べ方の例（SQL）
+
+```sql
+-- 全文検索（3 文字以上の語。索引つきで作ったとき）
+SELECT thread_key, no, name, snippet(posts_fts, 0, '【', '】', '…', 15)
+  FROM posts_fts WHERE posts_fts MATCH '"量的緩和"' LIMIT 20;
+
+-- 2 文字以下の語や、索引なしのときは LIKE（18 万件でも 1 秒かからない）
+SELECT thread_key, no, name, date, substr(body, 1, 80)
+  FROM posts WHERE body LIKE '%日銀%' AND date LIKE '2001/%';
+
+-- ある人の書き込み
+SELECT thread_key, no, date, body FROM posts
+ WHERE name = 'ドラエモン' AND body LIKE '%白川%' ORDER BY date;
+
+-- スレの一部を読む
+SELECT no, name, date, body FROM posts
+ WHERE thread_key = 'economy/0126' AND no BETWEEN 540 AND 560 ORDER BY no;
+
+-- 年ごとのレス数
+SELECT substr(date, 1, 4) AS 年, count(*) FROM posts
+ WHERE date GLOB '[0-9][0-9][0-9][0-9]/*' GROUP BY 年;
+```
+
+開く道具は、無料の **DB Browser for SQLite**（画面で表を見たり SQL を実行したりできる）、`sqlite3` コマンド、Python の `sqlite3` モジュールなどが使えます。
+
+### AI で読む
+
+`ichigo_posts.sqlite` を、ファイルを扱える AI に渡すと、日本語で質問できます。
+手元のファイルを読んで SQL を実行できる AI エージェントでも、ファイルをアップロードして分析できる AI チャットでも使えます。
+
+頼み方の例:
+
+- 「`ichigo_posts.sqlite` は、いちごBBS経済板（2000〜2014年）のレスを集めた SQLite です。`posts` 表が 1 行 1 レスです。
+  2002 年に『インフレ目標』を議論したスレと主な論者を、スレ番号とレス番号つきで挙げてください」
+- 「名前が『ドラエモン』の書き込みから、財政政策への立場がわかるものを 10 件引用して、立場を要約してください」
+- 「`economy/0126` の 540〜560 番の議論の流れをまとめてください」
+
+コツ:
+
+- 最初に上の「中身（表と列）」を伝えると、AI が迷わず SQL を書けます
+- 答えには**スレ番号とレス番号を付けてもらい**、原文で確かめてください。公開サイトでは
+  `https://p72.github.io/ichigo-econ-archive/economy_0126.html#556` のように、`#レス番号` でそのレスに飛べます
+- アップロードできるファイルの大きさはサービスによって上限があります。`--no-fts` の小さい版を使い、それでも大きいときは
+  必要なスレだけを SQL で取り出して（CSV などにして）渡してください
+- 書き込みは当時の投稿者のものです。AI の要約は、原文と照らし合わせて扱ってください
+
 ## はじめかた
 
 ```bash
@@ -122,13 +205,7 @@ zip の中身は、閲覧用 HTML（スレごと＋`index.html`）、説明書 `
 （手元の `ichigo.db` はそのまま）。HTML の各レスには、見た目を変えずに日付・ID・トリップ・コテハン番号を
 data 属性で埋め込んであり、`build_posts_db.py` はそれを読んで `ichigo_posts.sqlite` を作ります。
 
-zip を受け取った人は、展開したフォルダで次を実行するだけです。
-
-```bash
-python build_posts_db.py              # → ichigo_posts.sqlite（全文検索つき、約 360MB・30 秒）
-python build_posts_db.py --no-fts     # 全文検索の索引なし（約 110MB・数秒）
-python build_posts_db.py 配布.zip      # zip を展開せずに読むこともできる
-```
+zip を受け取った人が検索用 DB を作る手順は、上の「検索用 DB を作る・使う」にあります。
 
 ## URL 集から DB を再現する
 

@@ -1213,10 +1213,25 @@ zip は収集ツールで集めた結果を、読める形に書き出したも�
   ※ zip を展開せずに中の HTML を直接開かないでください。Windows のエクスプローラーで zip の中の
     ファイルを開くと、そのファイルだけが一時フォルダに取り出されるため、ほかのページへのリンクが切れます。
 
-■ 検索用の SQLite を作る（Python 3.8 以上）
-  python build_posts_db.py
-    → 同じフォルダに ichigo_posts.sqlite ができます（全文検索の索引つきで約 360MB、
-      --no-fts で索引なし約 110MB）。zip を展開せずに python build_posts_db.py この.zip でも作れます。
+■ 検索用の SQLite を作る（調べもの・AI で読む）
+  1 行 = 1 レスの SQLite（ichigo_posts.sqlite）を作れます。キーワードや人で横断して探したり、
+  AI に渡して日本語で質問したりするのに向いています。
+
+  1. Python 3.8 以上を用意する（Windows は python.org の公式インストーラー）
+  2. このフォルダでターミナルを開く
+       Windows: エクスプローラーのアドレス欄に cmd と打って Enter
+       Mac:     ターミナルで「cd 」と打ち、このフォルダをドラッグして Enter
+  3. 次のどちらかを実行する（Mac は python を python3 に）
+       python build_posts_db.py            全文検索の索引つき（約 360MB・30 秒ほど）
+       python build_posts_db.py --no-fts   索引なし（約 110MB・数秒）。AI に渡すならこちら
+
+  表: posts（1 行 1 レス: thread_key, no, name, date, uid, trip, handle_k, body）、
+      threads（スレ: thread_key, title, posts）、handles（まとめログのコテハン）、posts_fts（全文検索）
+  例: SELECT thread_key, no, name, date, body FROM posts WHERE body LIKE '%日銀%' AND date LIKE '2001/%';
+
+  AI に渡すときは、上の表の説明を最初に伝え、答えにスレ番号とレス番号を付けてもらって、
+  原文（economy_NNNN.html#レス番号）で確かめてください。
+  SQL の例や AI への頼み方は readme.html（README）の「検索用 DB を作る・使う」に詳しく書いています。
 
 ■ 何が入っているか
   いちごびびえす（いちごBBS、2000〜2014年）の「経済／経済学」板のうち、Internet Archive の
