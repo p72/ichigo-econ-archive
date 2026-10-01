@@ -950,6 +950,113 @@ def mask_emails(s):
     return EMAIL.sub(r"\1***@\2", s or "")
 
 
+REPO_URL = "https://github.com/p72/ichigo-econ-archive"
+
+
+def repo_link(u):
+    """README の相対リンクを GitHub 上の場所に（サイトや zip の中には無いファイルなので）"""
+    if re.match(r"[a-z]+:|#", u):
+        return u
+    if u.endswith(".zip"):
+        return f"{REPO_URL}/raw/main/{u}"
+    if u.endswith("/"):
+        return f"{REPO_URL}/tree/main/{u}"
+    return f"{REPO_URL}/blob/main/{u}"
+
+
+def md_inline(s):
+    """`コード` **太字** [文字](URL) と URL の直書き"""
+    e = html.escape
+    out, pos = [], 0
+    for m in re.finditer(r"`([^`]+)`|\*\*(.+?)\*\*|\[([^\]]+)\]\(([^)\s]+)\)|(https?://[^\s<>（）)]+)", s):
+        out.append(e(s[pos:m.start()]))
+        if m.group(1) is not None:
+            out.append(f"<code>{e(m.group(1))}</code>")
+        elif m.group(2) is not None:
+            out.append(f"<strong>{md_inline(m.group(2))}</strong>")
+        elif m.group(3) is not None:
+            out.append(f'<a href="{e(repo_link(m.group(4)))}">{md_inline(m.group(3))}</a>')
+        else:
+            out.append(f'<a href="{e(m.group(5))}">{e(m.group(5))}</a>')
+        pos = m.end()
+    out.append(e(s[pos:]))
+    return "".join(out)
+
+
+def md_to_html(text):
+    """README.md 用の小さな Markdown 変換（見出し・段落・箇条書き・引用・表・コードブロック）"""
+    lines = text.replace("\r\n", "\n").split("\n")
+    out, i = [], 0
+    cell = lambda r: [c.strip() for c in r.strip().strip("|").split("|")]
+    while i < len(lines):
+        ln = lines[i]
+        if ln.startswith("```"):
+            j = i + 1
+            while j < len(lines) and not lines[j].startswith("```"):
+                j += 1
+            out.append("<pre><code>" + html.escape("\n".join(lines[i + 1:j])) + "</code></pre>")
+            i = j + 1
+        elif re.match(r"#{1,6} ", ln):
+            n = len(ln.split(" ")[0])
+            out.append(f"<h{n}>{md_inline(ln[n + 1:])}</h{n}>")
+            i += 1
+        elif ln.startswith(">"):
+            buf = []
+            while i < len(lines) and lines[i].startswith(">"):
+                buf.append(lines[i][1:].strip())
+                i += 1
+            out.append("<blockquote><p>" + "<br>".join(md_inline(b) for b in buf if b) + "</p></blockquote>")
+        elif ln.startswith("|") and i + 1 < len(lines) and re.match(r"\|[-| :]+\|?$", lines[i + 1].strip()):
+            rows = [cell(ln)]
+            i += 2
+            while i < len(lines) and lines[i].startswith("|"):
+                rows.append(cell(lines[i]))
+                i += 1
+            th = "".join(f"<th>{md_inline(c)}</th>" for c in rows[0])
+            tds = "".join("<tr>" + "".join(f"<td>{md_inline(c)}</td>" for c in r) + "</tr>" for r in rows[1:])
+            out.append(f"<table><tr>{th}</tr>{tds}</table>")
+        elif re.match(r"(- |\d+\. )", ln):
+            tag = "ol" if ln[0].isdigit() else "ul"
+            items = []
+            while i < len(lines) and (re.match(r"(- |\d+\. )", lines[i]) or
+                                      (lines[i].startswith("  ") and lines[i].strip() and items)):
+                if lines[i].startswith("  "):          # 字下げで続く行は直前の項目の続き
+                    items[-1] += "\n" + lines[i].strip()
+                else:
+                    items.append(re.sub(r"^(- |\d+\. )", "", lines[i]))
+                i += 1
+            out.append(f"<{tag}>" + "".join(f"<li>{md_inline(t)}</li>" for t in items) + f"</{tag}>")
+        elif not ln.strip():
+            i += 1
+        else:
+            buf = []
+            while i < len(lines) and lines[i].strip() and not re.match(r"(```|#{1,6} |>|\||- |\d+\. )", lines[i]):
+                buf.append(lines[i])
+                i += 1
+            out.append("<p>" + md_inline("\n".join(buf)) + "</p>")
+    return "\n".join(out)
+
+
+def write_readme_html(outdir):
+    """README.md（収集ツールと同じ場所）を readme.html にする。無ければ何もしない。戻り値: 書いたか"""
+    src = os.path.join(os.path.dirname(os.path.abspath(__file__)), "README.md")
+    if not os.path.exists(src):
+        return False
+    with open(src, encoding="utf-8") as f:
+        body = md_to_html(f.read())
+    style = ("body{font-family:sans-serif;max-width:52em;margin:auto;padding:1em;line-height:1.6}"
+             "table{border-collapse:collapse;margin:.5em 0}td,th{border:1px solid #ccc;padding:.2em .5em;vertical-align:top}"
+             "pre{background:#f6f6f6;padding:.6em;overflow:auto}code{background:#f3f3f3;padding:0 .2em}"
+             "pre code{background:none;padding:0}blockquote{margin:1em 0;padding:.2em 1em;border-left:4px solid #cb9;"
+             "background:#fffbe8}h2{border-bottom:1px solid #ddd;margin-top:1.6em}")
+    with open(os.path.join(outdir, "readme.html"), "w", encoding="utf-8", newline="\n") as f:
+        f.write(f'<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width">'
+                f'<title>README - いちごBBS経済板 アーカイブ</title><style>{style}</style>'
+                f'<nav><a href="index.html">トップ</a> ＞ README（このアーカイブとツールの説明）</nav>{body}'
+                f'<hr><p>元の README.md: <a href="{REPO_URL}#readme">{REPO_URL}</a></p>')
+    return True
+
+
 # スレタイの絞り込み（年ページとトップ）。tr.t の data-title を見る。空白区切りは AND。
 # 全角・半角と大文字・小文字は比べるときだけ NFKC でそろえる（データの表記ゆれはそのまま残す）
 FILTER_JS = """<script>
@@ -1041,6 +1148,8 @@ def write_archive_html(con, outdir, mask=False):
 
     # トップ
     total = sum(len(t[2]) for t in threads)
+    readme = ('<p>このアーカイブの作り方・収集ツール・検索用 DB の作り方は '
+              '<a href="readme.html">README（説明）</a>をご覧ください。</p>') if write_readme_html(outdir) else ""
     yrows = "".join(
         f'<tr><td><a href="{ypage(y)}">{e(y)}年</a></td>'
         f'<td class="n">{sum(1 for t in threads if t[3] == y)}</td>'
@@ -1060,7 +1169,7 @@ def write_archive_html(con, outdir, mask=False):
                 f'Wayback Machine に残っていた分をスレごとにまとめ直したものです。'
                 f'{len(threads)} スレ / {total} レス。</p>'
                 f'<p>スレは、立った年（取れている一番古い書き込みの日付）ごとに分けています。'
-                f'本文の &gt;&gt;554 にマウスを乗せる（スマホはタップ）と、アンカー先のレスが出ます。</p>'
+                f'本文の &gt;&gt;554 にマウスを乗せる（スマホはタップ）と、アンカー先のレスが出ます。</p>{readme}'
                 f'<h2>スレタイから探す（全年）</h2>{FILTER_BOX}'
                 f'<table id="tl" style="display:none"><tr><th>番号</th><th>スレタイ</th><th>年</th>'
                 f'<th>レス</th><th>期間</th></tr>{arows}</table>'
