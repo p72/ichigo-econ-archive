@@ -1150,6 +1150,8 @@ def write_archive_html(con, outdir, mask=False):
     total = sum(len(t[2]) for t in threads)
     readme = ('<p>このアーカイブの作り方・収集ツール・検索用 DB の作り方は '
               '<a href="readme.html">README（説明）</a>をご覧ください。</p>') if write_readme_html(outdir) else ""
+    readme += (f'<p>リポジトリ（main ブランチ）: <a href="{REPO_URL}/tree/main">{REPO_URL}</a>'
+               '（収集ツール・ドキュメント・この zip の最新版）</p>')
     yrows = "".join(
         f'<tr><td><a href="{ypage(y)}">{e(y)}年</a></td>'
         f'<td class="n">{sum(1 for t in threads if t[3] == y)}</td>'
