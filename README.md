@@ -3,16 +3,21 @@
 2000〜2014年に運営されていた匿名掲示板「いちごびびえす（いちごBBS）」の**経済／経済学板**の残骸を、
 Internet Archive の Wayback Machine から集めて、SQLite の掲示板データベースに復元するツールです。
 
+| したいこと | 使うもの |
+|---|---|
+| **ブラウザで読む** | 公開サイト https://p72.github.io/ichigo-econ-archive/ 、または zip を展開して `index.html` を開く（→「読むだけの人へ」）|
+| **検索・集計・AI で読む** | zip の中の `build_posts_db.py` で検索用 DB（`ichigo_posts.sqlite`）を作る（→「検索用 DB を作る・使う」）|
+| **自分で集め直す** | 収集ツール `ichigo_archiver.py` で Wayback Machine から集める（→「はじめかた」）|
+
+zip（[releases/ichigo-econ-archive-2026-10-01.zip](releases/ichigo-econ-archive-2026-10-01.zip)、約 34MB）は、収集ツールで集めた結果を
+読める形に書き出したものです。中身は公開サイトと同じ HTML に、説明書と検索用 DB を作るツールを添えています。
+
+収集ツールについて:
+
 - Python 3.8 以上の標準ライブラリだけで動きます（追加インストール不要。3.14 で動作確認）
 - 取得は 2 秒間隔。中断・再開ができるので、毎日少しずつ回して「コツコツ」集められます
 - 時期ごとに違う 3 種類の掲示板システム＋まとめログサイトの HTML を、同じ形のレスに分解します
 - 全文検索、アンカー（`>>554`）を辿る表示、閲覧用 HTML・CSV の書き出しができます
-
-> **アーカイブを読みたい人は zip を、自分で集め直したい人は収集ツールを使ってください。**
-> zip は収集ツールで集めた結果を、読める形に書き出したものです。
-
-- **ブラウザで読む**: https://p72.github.io/ichigo-econ-archive/
-- **zip をダウンロード**: [releases/ichigo-econ-archive-2026-10-01.zip](releases/ichigo-econ-archive-2026-10-01.zip)（約 34MB。中身は上のサイトと同じ HTML＋説明書＋検索用 DB のビルドツール）
 
 ## 3 つのもの
 

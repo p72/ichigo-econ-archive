@@ -1193,8 +1193,13 @@ def cmd_export_html(args):
 RELEASE_README = """いちごBBS経済板 アーカイブ（{date} 版）
 ==========================================
 
-アーカイブを読みたい人は zip を、自分で集め直したい人は収集ツールを使ってください。
-zip は収集ツールで集めた結果を、読める形に書き出したものです。
+  ブラウザで読む         → このフォルダの index.html を開く（下の「読む」）
+  検索・集計・AI で読む  → build_posts_db.py で検索用 DB を作る（下の「検索用の SQLite を作る」）
+  自分で集め直す         → 収集ツール ichigo_archiver.py で Wayback Machine から集める
+                           https://github.com/p72/ichigo-econ-archive
+
+この zip は、収集ツールで集めた結果を読める形に書き出したものです。
+公開サイト https://p72.github.io/ichigo-econ-archive/ と同じ HTML に、説明書と検索用 DB を作るツールを添えています。
 
 ■ 中身
   index.html            トップ（ここから読み始める）。年ごとの一覧へのリンクと、まとめログのコテハン一覧
