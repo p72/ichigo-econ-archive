@@ -12,6 +12,9 @@ Internet Archive の Wayback Machine から集めて、SQLite の掲示板デー
 zip（[releases/ichigo-econ-archive-2026-10-01.zip](releases/ichigo-econ-archive-2026-10-01.zip)、約 34MB）は、収集ツールで集めた結果を
 読める形に書き出したものです。中身は公開サイトと同じ HTML に、説明書と検索用 DB を作るツールを添えています。
 
+- **リポジトリ（main ブランチ）**: https://github.com/p72/ichigo-econ-archive/tree/main （収集ツール・ドキュメント・zip）
+- **公開サイト**: https://p72.github.io/ichigo-econ-archive/
+
 収集ツールについて:
 
 - Python 3.8 以上の標準ライブラリだけで動きます（追加インストール不要。3.14 で動作確認）
