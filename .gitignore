@@ -1,0 +1,14 @@
+# 収集用 DB（約 850MB。生 HTML・メール欄を含むので公開しない）
+ichigo.db
+ichigo.db-journal
+ichigo.db-wal
+ichigo.db-shm
+
+# 検索用 DB（配布 zip から build_posts_db.py で作る）
+*.sqlite
+
+# 手元の書き出し・作業用
+out/
+site/
+*.csv
+__pycache__/
