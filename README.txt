@@ -34,6 +34,11 @@
   1 行 = 1 レスの SQLite（ichigo_posts.sqlite）を作れます。キーワードや人で横断して探したり、
   AI に渡して日本語で質問したりするのに向いています。
 
+  作らなくても、作成済みのもの（全文検索の索引なしの版）をリポジトリの releases/ で配っています。
+    ichigo_posts-2026-10-01.sqlite.zip（約 34MB。展開すると ichigo_posts.sqlite、約 110MB）
+    https://github.com/p72/ichigo-econ-archive/tree/main/releases
+  自分で作るときは次のとおりです。
+
   1. Python 3.8 以上を用意する（Windows は python.org の公式インストーラー）
   2. このフォルダでターミナルを開く
        Windows: エクスプローラーのアドレス欄に cmd と打って Enter
