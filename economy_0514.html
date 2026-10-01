@@ -1,0 +1,22 @@
+<!doctype html><html lang="ja" data-format="ichigo-archive-1"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>価格の決まり方</title><meta name="thread_key" content="economy/0514"><style>body{font-family:sans-serif;max-width:52em;margin:auto;padding:1em}dd{margin:0 0 1.2em 1.5em;line-height:1.6}dt{color:#060}a.anc{color:#36c}#pop{display:none;position:absolute;z-index:9;max-width:40em;max-height:60vh;overflow:auto;background:#fffbe8;border:1px solid #cb9;box-shadow:0 2px 8px #0003;padding:.2em .8em;font-size:.95em}#pop dd{margin-bottom:.6em}.miss{color:#999}</style><nav><a href="index.html">トップ</a> ＞ <a href="year_2002.html">2002年</a></nav><h1>価格の決まり方</h1><p>economy/0514 ／ 7 レス ／ 2002/05/17〜2002/05/23</p><dl><dt id="1" data-date="2002/05/17(Fri) 15:49">1 ：<b>どんたく名無しさん</b>：2002/05/17(Fri) 15:49  </dt><dd>需給均衡が利潤率の均衡化という形で達成されるのはなぜですか？</dd><dt id="2" data-date="2002/05/17(Fri) 16:57">2 ：<b>ドラエモン</b>：2002/05/17(Fri) 16:57  </dt><dd>謹啓には利潤率均等化という概念はありません。あるとすれば、利潤ゼロで均等化する<br>長期均衡の概念だけです。</dd><dt id="3" data-date="2002/05/18(Sat) 09:05">3 ：<b>どんたく名無しさん</b>：2002/05/18(Sat) 09:05  </dt><dd>もう少しくわしく書くと、利潤の少ない産業からは企業や投資家が撤退して供給量が減り、その産業の生産物が減少して価格が上がります。逆に、利潤の大きい産業には新たに企業が参入してきてその産業の生産物が増大して価格が下がります。このようにして、投下資本に対する平均利潤が形成されると思います。独占とかで資本が移動しににくくなっている場合は別として競争が激しい場合にはこのような現象が見られると思います。<br>ただ、僕がイマイチ理解できないのが、このように投下資本に対する平均利潤が達成された時に需給が均衡しているのはどうしてだろうかということです。もうすこし考えて見ます。</dd><dt id="4" data-date="2002/05/19(Sun) 01:45">4 ：<b>??</b>：2002/05/19(Sun) 01:45  </dt><dd>謹啓的にいうと、生産および消費のパレート最適である競争市場均衡は、限界価値生産性<br>（労働の賃金、資本の利子）が各部門で等しくなったところで成立する。それが、○系的<br>には利潤率均衡化ではないか。生産および消費のパレート最適については、中級の価格理<br>論教科書を参照せよ。</dd><dt id="5" data-date="2002/05/19(Sun) 02:22">5 ：<b>どんたく名無しさん</b>：2002/05/19(Sun) 02:22  </dt><dd><a class="anc" href="#2" data-to="2 4">＞02、04</a><br>ありがとうございます。○クス経済学では利潤率が平均化したときの価格を「生産価格」といいますが、それは近代経済学の「費用」という概念にほぼ該当するそうです。しかし、マルクス経済学の「生産価格」という概念は原価+平均利潤であるのに対し、近代経済学では利潤＝収入－費用という書かれ方がされますから同じかどうか微妙だと思います。</dd><dt id="6" data-date="2002/05/19(Sun) 16:02">6 ：<b>どんたく名無しさん</b>：2002/05/19(Sun) 16:02  </dt><dd>やはり、02さんのいわれるように、○経の「生産価格」という概念は、近経の「産業の長期均衡では利潤はゼロ」という状態における価格であるようです。しかし、それがパレート最適である競争市場均衡であるかどうかは私には知識がありませんのでわかりません。また考えて見ます。</dd><dt id="7" data-date="2002/05/23(Thu) 23:58">7 ：<b>どんたく名無しさん</b>：2002/05/23(Thu) 23:58  </dt><dd>「生産価格」ってのは、生産関数で収穫一定を仮定しているのかね？マル系も<br>もう少し数理化してくれるといいのにね。聖書の暗記とその解釈だけじゃ<br>つまらなかろうと思う。というか、それは学問とはいわんが（ｗ</dd></dl><script>
+(function(){
+  var pop=document.createElement('div');pop.id='pop';document.body.appendChild(pop);
+  function show(a){
+    var h='';a.dataset.to.split(' ').forEach(function(n){
+      var dt=document.getElementById(n);
+      h+= dt ? '<dl>'+dt.outerHTML.replace(/ id="\d+"/,'')+dt.nextElementSibling.outerHTML+'</dl>'
+             : '<p class="miss">&gt;&gt;'+n+' は未取得</p>';});
+    pop.innerHTML=h;pop.style.display='block';
+    var r=a.getBoundingClientRect();
+    pop.style.left=Math.max(8,Math.min(r.left,innerWidth-pop.offsetWidth-8))+scrollX+'px';
+    pop.style.top=(r.bottom+6+scrollY)+'px';
+  }
+  document.addEventListener('mouseover',function(ev){
+    var a=ev.target.closest('a.anc');if(a)show(a);
+    else if(!ev.target.closest('#pop'))pop.style.display='none';});
+  document.addEventListener('click',function(ev){
+    var a=ev.target.closest('a.anc');
+    if(a&&matchMedia('(hover:none)').matches&&pop.style.display!=='block'){ev.preventDefault();show(a);}
+    else if(!ev.target.closest('#pop')&&!a)pop.style.display='none';});
+})();
+</script>

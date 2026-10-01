@@ -1,0 +1,21 @@
+<!doctype html><html lang="ja" data-format="ichigo-archive-1"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>2010年に立ったスレ - いちごBBS経済板 アーカイブ</title><style>body{font-family:sans-serif;max-width:52em;margin:auto;padding:1em;line-height:1.5}table{border-collapse:collapse}td,th{border:1px solid #ccc;padding:.15em .5em}td.n{text-align:right}nav{margin:.5em 0}</style><nav><a href="index.html">トップ</a> ｜ <a href="year_2009.html">◀ 2009年</a> <a href="year_2011.html">2011年 ▶</a></nav><h1>2010年に立ったスレ</h1><p>8 スレ / 801 レス</p><p>スレタイで絞り込み: <input id="q" type="search" size="30" placeholder="例: 日銀 緩和（空白で区切ると両方を含むもの）"> <span id="qc"></span></p><table id="tl"><tr><th>番号</th><th>スレタイ</th><th>レス</th><th>期間</th></tr><tr class="t" data-title="トンデモ経済学家元追求委員会ｖol.12"><td class="n">1530</td><td><a href="economy_1530.html">トンデモ経済学家元追求委員会ｖol.12</a></td><td class="n">49</td><td>2010/02/05〜2010/04/18</td></tr><tr class="t" data-title="２０１０年の統一話題「派遣は完全禁止すべきか？！」Ｐａｒｔ１"><td class="n">1542</td><td><a href="economy_1542.html">２０１０年の統一話題「派遣は完全禁止すべきか？！」Ｐａｒｔ１</a></td><td class="n">94</td><td>2010/01/04〜2010/01/11</td></tr><tr class="t" data-title="★くだらない質問はここに書き込め★2７問目"><td class="n">1546</td><td><a href="economy_1546.html">★くだらない質問はここに書き込め★2７問目</a></td><td class="n">73</td><td>2010/02/01〜2011/02/11</td></tr><tr class="t" data-title="★ブログ界隈★お話しようね★#11"><td class="n">1547</td><td><a href="economy_1547.html">★ブログ界隈★お話しようね★#11</a></td><td class="n">29</td><td>2010/02/10〜2010/07/26</td></tr><tr class="t" data-title="★Twitter界隈★お話しようね★"><td class="n">1551</td><td><a href="economy_1551.html">★Twitter界隈★お話しようね★</a></td><td class="n">11</td><td>2010/04/07〜2010/07/28</td></tr><tr class="t" data-title="ドラエモン（岡田靖さん）死去・・・。"><td class="n">1553</td><td><a href="economy_1553.html">ドラエモン（岡田靖さん）死去・・・。</a></td><td class="n">420</td><td>2010/04/12〜2012/05/17</td></tr><tr class="t" data-title="経済ニュース 24"><td class="n">1555</td><td><a href="economy_1555.html">経済ニュース 24</a></td><td class="n">101</td><td>2010/05/06〜2010/08/18</td></tr><tr class="t" data-title="★★★腕白＝神★★★史上最強の経済政策★★★腕白＝神★★★"><td class="n">1571</td><td><a href="economy_1571.html">★★★腕白＝神★★★史上最強の経済政策★★★腕白＝神★★★</a></td><td class="n">24</td><td>2010/10/31〜2010/11/21</td></tr></table><nav><a href="year_2009.html">◀ 2009年</a> <a href="year_2011.html">2011年 ▶</a></nav><script>
+function setupFilter(inp, tbl, cnt, hideWhenEmpty) {
+  var rows = [].slice.call(document.querySelectorAll('#' + tbl + ' tr.t'));
+  var norm = function (s) { return (s.normalize ? s.normalize('NFKC') : s).toLowerCase(); };
+  rows.forEach(function (r) { r._t = norm(r.getAttribute('data-title')); });
+  var i = document.getElementById(inp), c = document.getElementById(cnt), tb = document.getElementById(tbl);
+  function run() {
+    var ws = norm(i.value).split(/\s+/).filter(Boolean), n = 0;
+    rows.forEach(function (r) {
+      var ok = ws.every(function (w) { return r._t.indexOf(w) >= 0; });
+      r.style.display = ok ? '' : 'none'; if (ok) n++;
+    });
+    if (hideWhenEmpty) tb.style.display = ws.length ? '' : 'none';
+    c.textContent = ws.length ? rows.length + '本中 ' + n + '本' : (hideWhenEmpty ? '' : rows.length + '本');
+  }
+  i.addEventListener('input', run);
+  var m = location.search.match(/[?&]q=([^&]*)/);
+  if (m) i.value = decodeURIComponent(m[1].replace(/\+/g, ' '));
+  run();
+}
+</script><script>setupFilter('q','tl','qc',false);</script>

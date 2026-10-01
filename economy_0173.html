@@ -1,0 +1,22 @@
+<!doctype html><html lang="ja" data-format="ichigo-archive-1"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>X12ARIMAの使い方</title><meta name="thread_key" content="economy/0173"><style>body{font-family:sans-serif;max-width:52em;margin:auto;padding:1em}dd{margin:0 0 1.2em 1.5em;line-height:1.6}dt{color:#060}a.anc{color:#36c}#pop{display:none;position:absolute;z-index:9;max-width:40em;max-height:60vh;overflow:auto;background:#fffbe8;border:1px solid #cb9;box-shadow:0 2px 8px #0003;padding:.2em .8em;font-size:.95em}#pop dd{margin-bottom:.6em}.miss{color:#999}</style><nav><a href="index.html">トップ</a> ＞ <a href="year_2001.html">2001年</a></nav><h1>X12ARIMAの使い方</h1><p>economy/0173 ／ 7 レス ／ 2001/02/12〜2001/02/13</p><dl><dt id="1" data-date="2001/02/12(Mon) 02:00">1 ：<b>卵</b>：2001/02/12(Mon) 02:00  </dt><dd>どなたか季節調整のかけ方を知ってある方が<br>いらしたら教えてください。概念みたいなのを<br>解説してる本とか論文とかはあるけど、<br>実際に季調の初心者が手始めとして使える<br>解説書とかはないようで。ＤＯＳ画面での操作<br>とかがよく分からないんですが。。</dd><dt id="2" data-date="2001/02/12(Mon) 02:07">2 ：<b>ドラエモン</b>：2001/02/12(Mon) 02:07  </dt><dd>日銀のＨＰにセンサス局のマニュアルの翻訳があったような気がする。</dd><dt id="3" data-date="2001/02/12(Mon) 02:15">3 ：<b>すりらんか</b>：2001/02/12(Mon) 02:15  </dt><dd>これですね．<br>http://www.boj.or.jp/ronbun/97/x12aman.htm</dd><dt id="4" data-date="2001/02/12(Mon) 19:34">4 ：<b>卵</b>：2001/02/12(Mon) 19:34  </dt><dd>有り難うございます、大変参考に<br>なりました。<br>やはりこのマニュアルも難しいですね。<br>日銀だけでしょうか、こういったマニュアル<br>を公表しているのは？</dd><dt id="5" data-date="2001/02/12(Mon) 19:42">5 ：<b>ドラエモン</b>：2001/02/12(Mon) 19:42  </dt><dd>あとは、Ｘ１２組み込んだ市販のソフトなら簡単に季調掛けられますが、詳しいオプションの<br>説明は、やっぱりセンサスのマニュアル参照と言うことになってます。</dd><dt id="6" data-date="2001/02/13(Tue) 00:04">6 ：<b>卵</b>：2001/02/13(Tue) 00:04  </dt><dd>そうなんですか、市販のソフトって<br>どういったものがあるんですか教えて頂けるとありがたいです。</dd><dt id="7" data-date="2001/02/13(Tue) 00:21">7 ：<b>ドラエモン</b>：2001/02/13(Tue) 00:21  </dt><dd>例えば、これの最新版（ver４）はｘ１２組み込み（というか、dosのプログラムにデータ渡して<br>処理した結果が帰ってくる）。でも、非線形回帰とかのルーチンに数値微分のバグがあるという<br>指摘がある。<br><br>http://www.eviews.com/</dd></dl><script>
+(function(){
+  var pop=document.createElement('div');pop.id='pop';document.body.appendChild(pop);
+  function show(a){
+    var h='';a.dataset.to.split(' ').forEach(function(n){
+      var dt=document.getElementById(n);
+      h+= dt ? '<dl>'+dt.outerHTML.replace(/ id="\d+"/,'')+dt.nextElementSibling.outerHTML+'</dl>'
+             : '<p class="miss">&gt;&gt;'+n+' は未取得</p>';});
+    pop.innerHTML=h;pop.style.display='block';
+    var r=a.getBoundingClientRect();
+    pop.style.left=Math.max(8,Math.min(r.left,innerWidth-pop.offsetWidth-8))+scrollX+'px';
+    pop.style.top=(r.bottom+6+scrollY)+'px';
+  }
+  document.addEventListener('mouseover',function(ev){
+    var a=ev.target.closest('a.anc');if(a)show(a);
+    else if(!ev.target.closest('#pop'))pop.style.display='none';});
+  document.addEventListener('click',function(ev){
+    var a=ev.target.closest('a.anc');
+    if(a&&matchMedia('(hover:none)').matches&&pop.style.display!=='block'){ev.preventDefault();show(a);}
+    else if(!ev.target.closest('#pop')&&!a)pop.style.display='none';});
+})();
+</script>

@@ -1,0 +1,22 @@
+<!doctype html><html lang="ja" data-format="ichigo-archive-1"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>過去スレ一覧表</title><meta name="thread_key" content="economy/0513"><style>body{font-family:sans-serif;max-width:52em;margin:auto;padding:1em}dd{margin:0 0 1.2em 1.5em;line-height:1.6}dt{color:#060}a.anc{color:#36c}#pop{display:none;position:absolute;z-index:9;max-width:40em;max-height:60vh;overflow:auto;background:#fffbe8;border:1px solid #cb9;box-shadow:0 2px 8px #0003;padding:.2em .8em;font-size:.95em}#pop dd{margin-bottom:.6em}.miss{color:#999}</style><nav><a href="index.html">トップ</a> ＞ <a href="year_2002.html">2002年</a></nav><h1>過去スレ一覧表</h1><p>economy/0513 ／ 2 レス ／ 2002/05/16〜2002/05/17</p><dl><dt id="1" data-date="2002/05/16(Thu) 09:13">1 ：<b>ドラエモン</b>：2002/05/16(Thu) 09:13  </dt><dd>謎の怪人くろきげんさんのボランティア活動で、以下の一覧表を頂きました。<br><br>http://www.math.tohoku.ac.jp/~kuroki/Readings/ichigo.html<br><br>せっかくの蓄積（あるいは過去の恥の集積＜儂）ですので、何か折りに活用しましょう。例：過去レス参照など</dd><dt id="2" data-date="2002/05/17(Fri) 23:00">2 ：<b>くろき げん</b>：2002/05/17(Fri) 23:00  </dt><dd>このスレッドは過去スレへの感想・紹介に使うことにすれば良さそうかな。<br>というわけでさっそく。<br><br>http://www.ichigobbs.net/cgi-bin/readres.cgi?bo=economy&amp;vi=0105<br>受験生にお勧めの経済本<br><br>このスレッドをついさっき読んでちょっといい気分になりました。受験生さんは紹介してもらった本のうち『ミク戦』だけを運良く発見できた。しかもそれが滅茶苦茶面白いことに気付いてしまい、受験生なのに『ミク戦』を読み進んでしまう。まだここを見ているかな？</dd></dl><script>
+(function(){
+  var pop=document.createElement('div');pop.id='pop';document.body.appendChild(pop);
+  function show(a){
+    var h='';a.dataset.to.split(' ').forEach(function(n){
+      var dt=document.getElementById(n);
+      h+= dt ? '<dl>'+dt.outerHTML.replace(/ id="\d+"/,'')+dt.nextElementSibling.outerHTML+'</dl>'
+             : '<p class="miss">&gt;&gt;'+n+' は未取得</p>';});
+    pop.innerHTML=h;pop.style.display='block';
+    var r=a.getBoundingClientRect();
+    pop.style.left=Math.max(8,Math.min(r.left,innerWidth-pop.offsetWidth-8))+scrollX+'px';
+    pop.style.top=(r.bottom+6+scrollY)+'px';
+  }
+  document.addEventListener('mouseover',function(ev){
+    var a=ev.target.closest('a.anc');if(a)show(a);
+    else if(!ev.target.closest('#pop'))pop.style.display='none';});
+  document.addEventListener('click',function(ev){
+    var a=ev.target.closest('a.anc');
+    if(a&&matchMedia('(hover:none)').matches&&pop.style.display!=='block'){ev.preventDefault();show(a);}
+    else if(!ev.target.closest('#pop')&&!a)pop.style.display='none';});
+})();
+</script>
