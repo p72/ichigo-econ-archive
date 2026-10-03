@@ -1080,6 +1080,13 @@ function setupFilter(inp, tbl, cnt, hideWhenEmpty) {
   run();
 }
 </script>"""
+# トップページの全文検索の案内（このアーカイブを読み込ませた AI の検索ページ。ユーザーが用意したもの）
+FULLTEXT_LINKS = (
+    '<h2>全文検索</h2><p>本文まで含めて全文検索をしたい方は、こちらをお使いください。</p><ul>'
+    '<li>GPT: <a href="https://ichigo-economics-archive.hina0077.chatgpt.site">'
+    'https://ichigo-economics-archive.hina0077.chatgpt.site</a></li>'
+    '<li>Claude: <a href="https://claude.ai/artifact/8Pa7sqYNmvmLrkjWBuDUTc">'
+    'https://claude.ai/artifact/8Pa7sqYNmvmLrkjWBuDUTc</a></li></ul>')
 FILTER_BOX = ('<p>スレタイで絞り込み: <input id="q" type="search" size="30" '
               'placeholder="例: 日銀 緩和（空白で区切ると両方を含むもの）"> <span id="qc"></span></p>')
 
@@ -1172,6 +1179,7 @@ def write_archive_html(con, outdir, mask=False):
                 f'{len(threads)} スレ / {total} レス。</p>'
                 f'<p>スレは、立った年（取れている一番古い書き込みの日付）ごとに分けています。'
                 f'本文の &gt;&gt;554 にマウスを乗せる（スマホはタップ）と、アンカー先のレスが出ます。</p>{readme}'
+                f'{FULLTEXT_LINKS}'
                 f'<h2>スレタイから探す（全年）</h2>{FILTER_BOX}'
                 f'<table id="tl" style="display:none"><tr><th>番号</th><th>スレタイ</th><th>年</th>'
                 f'<th>レス</th><th>期間</th></tr>{arows}</table>'
